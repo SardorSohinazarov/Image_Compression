@@ -26,6 +26,9 @@ namespace Image_Compression.Api.Controllers
             var fileId = Guid.NewGuid().ToString("N");
 
             await SaveLargeImageAsync(file, fileId);
+
+            // Compress the image here
+
             await SaveSmallImageAsync(file, fileId);
 
             return Ok();
