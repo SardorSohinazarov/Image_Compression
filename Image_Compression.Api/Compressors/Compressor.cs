@@ -14,7 +14,7 @@ namespace Image_Compression.Api.Compressors
         protected async Task SaveImageAsync(IFormFile file, string fileId, ImageType imageType)
         {
             var fileName = $"{fileId}{Path.GetExtension(file.FileName)}";
-            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageType.ToString().ToLower());
+            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageType.ToString());
 
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);

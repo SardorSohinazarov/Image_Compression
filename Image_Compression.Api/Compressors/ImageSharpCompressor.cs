@@ -19,6 +19,7 @@ namespace Image_Compression.Api.Compressors
             await SaveImageAsync(file, fileId, ImageType.Original);
 
             using var image = await Image.LoadAsync<Rgba32>(file.OpenReadStream());
+            image.Mutate(x => x.AutoOrient());
 
             await SaveResizedImageAsync(image, fileId, ImageType.Large, 1440);
             await SaveResizedImageAsync(image, fileId, ImageType.Medium, 450);

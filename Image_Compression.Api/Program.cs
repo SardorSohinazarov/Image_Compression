@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ICompressor, ImageSharpCompressor>();
+builder.Services.AddScoped<ICompressor, BitmapCompressor>();
 
 var app = builder.Build();
 

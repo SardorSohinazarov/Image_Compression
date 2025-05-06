@@ -1,4 +1,7 @@
-﻿
+﻿using Image_Compression.Api.Models;
+using System.Drawing;
+using System.Drawing.Imaging;
+
 namespace Image_Compression.Api.Compressors
 {
     public class BitmapCompressor : Compressor, ICompressor
@@ -13,7 +16,36 @@ namespace Image_Compression.Api.Compressors
 
         public async Task CompressAsync(IFormFile file, string fileId)
         {
-            throw new NotImplementedException("Bitmap compression is not implemented yet.");
+            await SaveImageAsync(file, fileId, ImageType.Original);
+
+            using var stream = file.OpenReadStream();
+            using var original = new Bitmap(stream);
+
+            await SaveResizedImageAsync(original, fileId, ImageType.Large, 1440);
+            await SaveResizedImageAsync(original, fileId, ImageType.Medium, 450);
+            await SaveResizedImageAsync(original, fileId, ImageType.Small, 267);
+        }
+
+        private async Task SaveResizedImageAsync(Bitmap original, string fileId, ImageType imageType, int targetHeight)
+        {
+            string sizeLabel = imageType.ToString();
+            var folder = Path.Combine(_webHostEnvironment.WebRootPath, "images", sizeLabel);
+            if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
+
+            var filePath = Path.Combine(folder, $"{fileId}.jpg");
+
+            int width = (int)((double)targetHeight / original.Height * original.Width);
+
+            if (original.Height <= targetHeight)
+            {
+                original.Save(filePath, ImageFormat.Jpeg);
+                return;
+            }
+
+            using var resized = new Bitmap(original, new Size(width, targetHeight));
+            resized.Save(filePath, ImageFormat.Jpeg);
+
+            await Task.CompletedTask;
         }
     }
 }
