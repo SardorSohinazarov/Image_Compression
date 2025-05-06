@@ -1,4 +1,4 @@
-﻿namespace Image_Compression.Api.Compressors
+﻿namespace Image_Compression.Api.Services
 {
     public interface ICompressor
     {

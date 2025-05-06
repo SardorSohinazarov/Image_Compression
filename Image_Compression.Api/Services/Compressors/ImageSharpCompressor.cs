@@ -4,14 +4,14 @@ using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace Image_Compression.Api.Compressors
+namespace Image_Compression.Api.Services.Compressors
 {
     public class ImageSharpCompressor : Compressor, ICompressor
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ImageSharpCompressor(IWebHostEnvironment webHostEnvironment)
-            : base(webHostEnvironment) 
+            : base(webHostEnvironment)
             => _webHostEnvironment = webHostEnvironment;
 
         public async Task CompressAsync(IFormFile file, string fileId)
@@ -35,14 +35,15 @@ namespace Image_Compression.Api.Compressors
 
             string path = Path.Combine(folder, $"{fileId}.webp");
 
+            var webpEncoder = new WebpEncoder
+            {
+                Quality = 75
+            };
+
             // If original height is already small enough, just save it
             if (original.Height <= targetHeight)
             {
-                await original.SaveAsWebpAsync(path, new WebpEncoder
-                {
-                    Quality = 75
-                });
-
+                await original.SaveAsWebpAsync(path, webpEncoder);
                 return;
             }
 
@@ -53,10 +54,7 @@ namespace Image_Compression.Api.Compressors
                 Size = new Size(0, targetHeight) // Width=0 means auto-calculate
             }));
 
-            await original.SaveAsWebpAsync(path, new WebpEncoder
-            {
-                Quality = 75
-            });
+            await original.SaveAsWebpAsync(path, webpEncoder);
         }
     }
 }

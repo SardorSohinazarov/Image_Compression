@@ -2,17 +2,15 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace Image_Compression.Api.Compressors
+namespace Image_Compression.Api.Services.Compressors
 {
     public class BitmapCompressor : Compressor, ICompressor
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public BitmapCompressor(IWebHostEnvironment webHostEnvironment)
-            : base(webHostEnvironment)
-        {
-            _webHostEnvironment = webHostEnvironment;
-        }
+            : base(webHostEnvironment) 
+            => _webHostEnvironment = webHostEnvironment;
 
         public async Task CompressAsync(IFormFile file, string fileId)
         {
@@ -32,18 +30,18 @@ namespace Image_Compression.Api.Compressors
             var folder = Path.Combine(_webHostEnvironment.WebRootPath, "images", sizeLabel);
             if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
-            var filePath = Path.Combine(folder, $"{fileId}.jpg");
+            var path = Path.Combine(folder, $"{fileId}.webp");
 
             int width = (int)((double)targetHeight / original.Height * original.Width);
 
             if (original.Height <= targetHeight)
             {
-                original.Save(filePath, ImageFormat.Jpeg);
+                original.Save(path, ImageFormat.Webp);
                 return;
             }
 
             using var resized = new Bitmap(original, new Size(width, targetHeight));
-            resized.Save(filePath, ImageFormat.Jpeg);
+            resized.Save(path, ImageFormat.Webp);
 
             await Task.CompletedTask;
         }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Image_Compression.Api.Compressors;
+using Image_Compression.Api.Services;
 
 namespace Image_Compression.Api.Controllers
 {
@@ -9,10 +9,8 @@ namespace Image_Compression.Api.Controllers
     {
         private readonly ICompressor _compressor;
 
-        public ImagesController(ICompressor compressor)
-        {
-            _compressor = compressor;
-        }
+        public ImagesController(ICompressor compressor) 
+            => _compressor = compressor;
 
         [HttpPost("compress")]
         public async Task<IActionResult> CompressAsync(IFormFile file)

@@ -1,6 +1,6 @@
 ﻿using Image_Compression.Api.Models;
 
-namespace Image_Compression.Api.Compressors
+namespace Image_Compression.Api.Services
 {
     public abstract class Compressor
     {
@@ -22,7 +22,7 @@ namespace Image_Compression.Api.Compressors
             var filePath = Path.Combine(folderPath, fileName);
 
             using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
+            await file.CopyToAsync(stream);
         }
     }
 }

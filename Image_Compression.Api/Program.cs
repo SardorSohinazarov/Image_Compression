@@ -1,4 +1,5 @@
-using Image_Compression.Api.Compressors;
+using Image_Compression.Api.Services;
+using Image_Compression.Api.Services.Compressors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+/// .Net yordamida lekin bu faqat Windowsda ishlaydi
 builder.Services.AddScoped<ICompressor, BitmapCompressor>();
+/// Magick.NET yordamida lunixda qo'shimcha narsalar o'natish kerak
+builder.Services.AddScoped<ICompressor, MagickCompressor>();
+/// ImageSharp top
+builder.Services.AddScoped<ICompressor, ImageSharpCompressor>();
 
 var app = builder.Build();
 
