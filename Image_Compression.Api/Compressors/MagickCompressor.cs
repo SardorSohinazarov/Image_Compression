@@ -3,14 +3,13 @@ using ImageMagick;
 
 namespace Image_Compression.Api.Compressors
 {
-    public class MagickCompressor : ICompressor
+    public class MagickCompressor : Compressor, ICompressor
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public MagickCompressor(IWebHostEnvironment webHostEnvironment)
-        {
-            _webHostEnvironment = webHostEnvironment;
-        }
+        public MagickCompressor(IWebHostEnvironment webHostEnvironment) 
+            : base(webHostEnvironment) 
+            => _webHostEnvironment = webHostEnvironment;
 
         public async Task CompressAsync(IFormFile file, string fileId)
         {
@@ -34,7 +33,7 @@ namespace Image_Compression.Api.Compressors
                 var folder = Path.Combine(_webHostEnvironment.WebRootPath, "images", sizeLabel);
                 if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
 
-                var path = Path.Combine(folder, $"{fileId}.{sizeLabel}.webp");
+                var path = Path.Combine(folder, $"{fileId}.webp");
                 await original.WriteAsync(new FileInfo(path));
                 return;
             }
@@ -45,22 +44,8 @@ namespace Image_Compression.Api.Compressors
             var targetFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", sizeLabel);
             if (!Directory.Exists(targetFolder)) Directory.CreateDirectory(targetFolder);
 
-            var filePath = Path.Combine(targetFolder, $"{fileId}.{sizeLabel}.webp");
+            var filePath = Path.Combine(targetFolder, $"{fileId}.webp");
             await clone.WriteAsync(new FileInfo(filePath));
-        }
-
-        private async Task SaveImageAsync(IFormFile file, string fileId, ImageType imageType)
-        {
-            var fileName = $"{fileId}.{imageType.ToString().ToLower()}{Path.GetExtension(file.FileName)}";
-            var folderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", imageType.ToString().ToLower());
-
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
-
-            var filePath = Path.Combine(folderPath, fileName);
-
-            using var stream = new FileStream(filePath, FileMode.Create);
-                await file.CopyToAsync(stream);
         }
     }
 }
