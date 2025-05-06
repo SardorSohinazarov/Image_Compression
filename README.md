@@ -50,5 +50,3 @@ Rasmlarni avtomatik tarzda turli o‘lchamlarga (Large, Medium, Small) siqish (c
 
 ---
 
-## 🗂️ Papkalar tuzilmasi
-
