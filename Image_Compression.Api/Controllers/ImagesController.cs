@@ -24,5 +24,18 @@ namespace Image_Compression.Api.Controllers
 
             return Ok("Images saved in all sizes.");
         }
+
+        [HttpPost("compress/{fileName}")]
+        public async Task<IActionResult> CompressAsync(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest("No file name provided.");
+
+            var fileId = Guid.NewGuid().ToString("N");
+
+            await _compressor.CompressAsync(fileName, fileId);
+
+            return Ok("Images saved in all sizes.");
+        }
     }
 }

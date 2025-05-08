@@ -24,6 +24,18 @@ namespace Image_Compression.Api.Services.Compressors
             await SaveResizedImageAsync(image, fileId, ImageType.Small, 267);
         }
 
+        public async Task CompressAsync(string fileName, string fileId)
+        {
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+            using var image = new MagickImage(path);
+            image.Format = MagickFormat.WebP;
+            image.Quality = 75;
+
+            await SaveResizedImageAsync(image, fileId, ImageType.Large, 1440);
+            await SaveResizedImageAsync(image, fileId, ImageType.Medium, 450);
+            await SaveResizedImageAsync(image, fileId, ImageType.Small, 267);
+        }
+
         private async Task SaveResizedImageAsync(MagickImage original, string fileId, ImageType imageType, int targetHeight)
         {
             string sizeLabel = imageType.ToString();

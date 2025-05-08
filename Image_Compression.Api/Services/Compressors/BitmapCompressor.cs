@@ -24,6 +24,16 @@ namespace Image_Compression.Api.Services.Compressors
             await SaveResizedImageAsync(original, fileId, ImageType.Small, 267);
         }
 
+        public async Task CompressAsync(string fileName, string fileId)
+        {
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", fileName);
+            using var original = new Bitmap(path);
+
+            await SaveResizedImageAsync(original, fileId, ImageType.Large, 1440);
+            await SaveResizedImageAsync(original, fileId, ImageType.Medium, 450);
+            await SaveResizedImageAsync(original, fileId, ImageType.Small, 267);
+        }
+
         private async Task SaveResizedImageAsync(Bitmap original, string fileId, ImageType imageType, int targetHeight)
         {
             string sizeLabel = imageType.ToString();

@@ -14,6 +14,17 @@ namespace Image_Compression.Api.Services.Compressors
             : base(webHostEnvironment)
             => _webHostEnvironment = webHostEnvironment;
 
+        public async Task CompressAsync(string fileName, string fileId)
+        {
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", "Original", fileName);
+            using var image = await Image.LoadAsync<Rgba32>(path);
+            image.Mutate(x => x.AutoOrient());
+
+            await SaveResizedImageAsync(image, fileId, ImageType.Large, 1440);
+            await SaveResizedImageAsync(image, fileId, ImageType.Medium, 450);
+            await SaveResizedImageAsync(image, fileId, ImageType.Small, 267);
+        }
+
         public async Task CompressAsync(IFormFile file, string fileId)
         {
             await SaveImageAsync(file, fileId, ImageType.Original);
