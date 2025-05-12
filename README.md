@@ -22,6 +22,7 @@ Rasmlarni avtomatik tarzda turli o‘lchamlarga (Large, Medium, Small) siqish (c
 1. Rasmni yuklang (`IFormFile`)
 2. Har bir yuklangan rasm `images/Original`, `images/Large`, `images/Medium`, `images/Small` papkalarga `.webp` formatda saqlanadi.
 3. Har o‘lcham `ImageType` enum orqali belgilanadi (`Original`, `Large`, `Medium`, `Small`).
+4. Hamda oldindan yuklangan rasmlarni ham file name orqali compress qilish mumkin.
 
 ---
 
